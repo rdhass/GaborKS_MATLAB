@@ -29,8 +29,9 @@ function strainModes(xLES,yLES,zLES,xF,yF,zF,gradU,U,V,W,gmxloc,gmyloc,gmzloc,..
         Umax = max(sqrt(U(:).^2 + V(:).^2 + W(:).^2));
         dxF = xF(2)-xF(1);
         dt = min([dxF/umax,dxF/Umax,1/max(S(:))])/4/2;
-
-        for n = 1:nmodes
+        
+        pool = parpool('threads');
+        parfor n = 1:nmodes
             k = [kx(n); ky(n); kz(n)];
             uR = [uhatR(n); vhatR(n); whatR(n)];
             uI = [uhatI(n); vhatI(n); whatI(n)];
@@ -48,3 +49,4 @@ function strainModes(xLES,yLES,zLES,xF,yF,zF,gradU,U,V,W,gmxloc,gmyloc,gmzloc,..
             uhatI(n) = uI(1); vhatI(n) = uI(2); whatI(n) = uI(3); 
             if mod(n,500) == 0; disp([num2str(n/nmodes*100),'% complete']); end
         end
+        delete(pool)

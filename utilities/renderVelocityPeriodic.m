@@ -66,6 +66,10 @@ function [uout,vout,wout] = renderVelocityPeriodic(uhatR,uhatI,vhatR,vhatI,whatR
         u(ist:ien,jst:jen,kst:ken) = u(ist:ien,jst:jen,kst:ken) + f.*(2*uhatR(n).*cs - 2*uhatI(n).*ss);
         v(ist:ien,jst:jen,kst:ken) = v(ist:ien,jst:jen,kst:ken) + f.*(2*vhatR(n).*cs - 2*vhatI(n).*ss);
         w(ist:ien,jst:jen,kst:ken) = w(ist:ien,jst:jen,kst:ken) + f.*(2*whatR(n).*cs - 2*whatI(n).*ss);
+
+        if mod(n,1000) == 0
+          disp([num2str(n/nmodes*100),'% Complete'])
+        end
     end
     
     % Add periodic contribution

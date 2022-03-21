@@ -6,9 +6,9 @@ clc, clear all, close all
     Lz = 2*pi;
 
     % LES mesh
-        nxLES = 16;
-        nyLES = 16;
-        nzLES = 16;
+        nxLES = 32;
+        nyLES = 32;
+        nzLES = 32;
 
     % QH mesh
         nxLESperQH = 2;
@@ -16,21 +16,21 @@ clc, clear all, close all
         nzLESperQH = 2;
 
     % High resolution mesh
-        nxF = 4*nxLES;
-        nyF = 4*nyLES;
-        nzF = 4*nzLES;
+        nxF = 8*nxLES;
+        nyF = 8*nyLES;
+        nzF = 8*nzLES;
 
 % Large scale data 
-    inputdir = '/Users/ryanhass/Documents/MATLAB/Lele_Research/Code development/GaborKS_V2_misc/data/';
+    inputdir = '/work2/06632/ryanhass/stampede2/Enrichment/GaborKS_V2Data/HIT256_forced16/largeScales/';
 
 % Where to write data
-    outputdir = '/Users/ryanhass/Documents/MATLAB/Lele_Research/Code development/GaborKS_V2_misc/data/';
+    outputdir = '/work2/06632/ryanhass/stampede2/Enrichment/GaborKS_V2Data/HIT256_forced16/';
 
 % Enrichment parameters
     nk = 10;
     ntheta = 10;
-    kmin = 9;
-    kmax = 32;
+    kmin = 11;
+    kmax = 110;
     scalefact = sqrt(0.45); % A tuneable parameter to get the correct energy spectrum. 
                    % This is required due to the attenuation of mode energy 
                    % in the domain due to the window function
@@ -40,6 +40,6 @@ clc, clear all, close all
     numolec = 0;
                    
 % Misc parameters
-    showGrid = true; % Graphically portray computational mesh? Good for debugging 
+    showGrid = false; % Graphically portray computational mesh? Good for debugging 
     doRenderIsotropic = true; % Render the pre-initialized isotropic modes?
     doRenderStrained = true; % Render the initialized anisotropic modes?
