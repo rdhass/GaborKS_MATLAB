@@ -1,4 +1,3 @@
-addpath('./data')
 addpath('./utilities')
 addpath('./utilities/TimeStepping')
 addpath('./utilities/vectorOps')

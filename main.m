@@ -1,7 +1,4 @@
 clc, clear all, close all
-addpath('./data')
-addpath('./functions')
-addpath('/Users/ryanhass/Documents/MATLAB/Lele_Research/matlabFunctions')
 
 % Set search paths
     searchPaths
@@ -18,9 +15,9 @@ addpath('/Users/ryanhass/Documents/MATLAB/Lele_Research/matlabFunctions')
             nyLESperQH,nzLESperQH,nxF,nyF,nzF);
     
 % Read in large scale flow field and compute integral scales
-    load('LargeScaleVelocity.mat')
+    load([inputdir,'LargeScaleVelocity.mat'])
     [L,KE] = computeLargeScaleParamsHIT(U,V,W,Lx,Ly,Lz);
-    load('LargeScaleGradient.mat')
+    load([inputdir,'LargeScaleGradient.mat'])
     
 % Generate isotropic modes
     % First assign global variables
@@ -33,7 +30,7 @@ addpath('/Users/ryanhass/Documents/MATLAB/Lele_Research/matlabFunctions')
      = initializeIsotropicModes(nxQH,nyQH,nzQH,xQH,yQH,zQH,dxQH,dyQH,dzQH,...
        nk,ntheta,kmin,kmax,scalefact,KE,L);
     disp('Finished initializing isotropic Gabor modes. Writing data to disk')
-    save(['./data/GaborModes_ntheta',num2str(ntheta),'_nk',num2str(nk),'.mat'],'uhatR','uhatI','vhatR','vhatI','whatR','whatI','kx','ky','kz',...
+    save([outputdir,'GaborModes_ntheta',num2str(ntheta),'_nk',num2str(nk),'.mat'],'uhatR','uhatI','vhatR','vhatI','whatR','whatI','kx','ky','kz',...
         'gmxloc','gmyloc','gmzloc','nxQH','nyQH','nzQH','nxLES','nyLES','nzLES','nxF','nyF','nzF',...
         'nxsupp','nysupp','nzsupp','xF','yF','zF','xFp','yFp','zFp')
     
@@ -48,14 +45,14 @@ addpath('/Users/ryanhass/Documents/MATLAB/Lele_Research/matlabFunctions')
         disp('Rendering isotropic velocity field')
         [u,v,w] = renderVelocityPeriodic(uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,gmxloc,gmyloc,gmzloc,nxsupp,nysupp,nzsupp,xFp,yFp,zFp);
         disp('Velocity rendered. Saving data to disk')
-        save(['./data/IsotropicVelocity_ntheta',num2str(ntheta),'_nk',num2str(nk),'.mat'],...
+        save([outputdir,'IsotropicVelocity_ntheta',num2str(ntheta),'_nk',num2str(nk),'.mat'],...
             'u','v','w','nxF','nyF','nzF')
     end
     
 % Strain the modes
     strainModes(xLES,yLES,zLES,xF,yF,zF,gradU,U,V,W,gmxloc,gmyloc,gmzloc,kx,ky,kz,uhatR,uhatI,vhatR,vhatI,whatR,whatI,Anu,KE,L,numolec,ctau);
     disp('Finished evolving Gabor modes. Writing data to disk')
-    save(['./data/GaborModesAfterStraining_ntheta',num2str(ntheta),'_nk',num2str(nk),'.mat'],'uhatR','uhatI','vhatR','vhatI','whatR','whatI','kx','ky','kz',...
+    save([outputdir,'GaborModesAfterStraining_ntheta',num2str(ntheta),'_nk',num2str(nk),'.mat'],'uhatR','uhatI','vhatR','vhatI','whatR','whatI','kx','ky','kz',...
     'gmxloc','gmyloc','gmzloc','nxQH','nyQH','nzQH','nxLES','nyLES','nzLES','nxF','nyF','nzF',...
     'nxsupp','nysupp','nzsupp','xF','yF','zF')
 %%
@@ -64,5 +61,5 @@ addpath('/Users/ryanhass/Documents/MATLAB/Lele_Research/matlabFunctions')
         disp('Begin rendering velocity')
         [u,v,w] = renderVelocityPeriodic(uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,gmxloc,gmyloc,gmzloc,nxsupp,nysupp,nzsupp,xFp,yFp,zFp);
         disp('Writing velocity to disk')
-        save(['./data/StrainedVelocity_ntheta',num2str(ntheta),'_nk',num2str(nk),'.mat'],'u','v','w','nxF','nyF','nzF')
+        save([outputdir,'StrainedVelocity_ntheta',num2str(ntheta),'_nk',num2str(nk),'.mat'],'u','v','w','nxF','nyF','nzF')
     end

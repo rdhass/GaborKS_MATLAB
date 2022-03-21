@@ -21,10 +21,10 @@ clc, clear all, close all
         nzF = 4*nzLES;
 
 % Large scale data 
-    inputdir = '/Users/ryanhass/Documents/MATLAB/Lele_Research/Code development/GaborKS_V2/data/';
+    inputdir = '/Users/ryanhass/Documents/MATLAB/Lele_Research/Code development/GaborKS_V2_misc/data/';
 
 % Where to write data
-    outputdir = '/Users/ryanhass/Documents/MATLAB/Lele_Research/Code development/GaborKS_V2/data/';
+    outputdir = '/Users/ryanhass/Documents/MATLAB/Lele_Research/Code development/GaborKS_V2_misc/data/';
 
 % Enrichment parameters
     nk = 10;
