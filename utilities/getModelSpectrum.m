@@ -1,7 +1,5 @@
 function E = getModelSpectrum(k,KE,L)
     % Inputs:
-    %   kL --> non-dimensional wavenumber
-    %   epsilon --> energy dissipation rate
     %   nu --> molecular viscosity
     %   L --> Integral length scale
     %   C --> Model constant. Pope suggests C = 1.2, see pg. 233
@@ -35,4 +33,3 @@ function E = getModelSpectrum(k,KE,L)
         
     % Model spectrum
         E = C*2*KE*L*fL.*feta;
-end
