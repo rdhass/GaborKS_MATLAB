@@ -52,7 +52,7 @@ clc, clear all, close all
 % Strain the modes
     strainModes(xLES,yLES,zLES,xF,yF,zF,gradU,U,V,W,gmxloc,gmyloc,gmzloc,kx,ky,kz,uhatR,uhatI,vhatR,vhatI,whatR,whatI,Anu,KE,L,numolec,ctau);
     disp('Finished evolving Gabor modes. Writing data to disk')
-    save([outputdir,'GaborModesAfterStraining_ntheta',num2str(ntheta),'_nk',num2str(nk),'.mat'],'uhatR','uhatI','vhatR','vhatI','whatR','whatI','kx','ky','kz',...
+    save([outputdir,'GaborModesAfterStraining_ntheta',num2str(ntheta),'_nk',num2str(nk),'_Anu',num2str(Anu),'.mat'],'uhatR','uhatI','vhatR','vhatI','whatR','whatI','kx','ky','kz',...
     'gmxloc','gmyloc','gmzloc','nxQH','nyQH','nzQH','nxLES','nyLES','nzLES','nxF','nyF','nzF',...
     'nxsupp','nysupp','nzsupp','xF','yF','zF')
 %%
@@ -61,5 +61,5 @@ clc, clear all, close all
         disp('Begin rendering velocity')
         [u,v,w] = renderVelocityPeriodic(uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,gmxloc,gmyloc,gmzloc,nxsupp,nysupp,nzsupp,xFp,yFp,zFp);
         disp('Writing velocity to disk')
-        save([outputdir,'StrainedVelocity_ntheta',num2str(ntheta),'_nk',num2str(nk),'.mat'],'u','v','w','nxF','nyF','nzF')
+        save([outputdir,'StrainedVelocity_ntheta',num2str(ntheta),'_nk',num2str(nk),'_Anu',num2str(Anu),'.mat'],'u','v','w','nxF','nyF','nzF')
     end

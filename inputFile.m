@@ -6,9 +6,9 @@ clc, clear all, close all
     Lz = 2*pi;
 
     % LES mesh
-        nxLES = 32;
-        nyLES = 32;
-        nzLES = 32;
+        nxLES = 16;
+        nyLES = 16;
+        nzLES = 16;
 
     % QH mesh
         nxLESperQH = 2;
@@ -16,21 +16,21 @@ clc, clear all, close all
         nzLESperQH = 2;
 
     % High resolution mesh
-        nxF = 8*nxLES;
-        nyF = 8*nyLES;
-        nzF = 8*nzLES;
+        nxF = 4*nxLES;
+        nyF = 4*nyLES;
+        nzF = 4*nzLES;
 
 % Large scale data 
-    inputdir = '/work2/06632/ryanhass/stampede2/Enrichment/GaborKS_V2Data/HIT256_forced16/largeScales/';
+    inputdir = '/Users/ryanhass/Documents/MATLAB/Lele_Research/Code development/GaborKS_V2_misc/data/';
 
 % Where to write data
-    outputdir = '/work2/06632/ryanhass/stampede2/Enrichment/GaborKS_V2Data/HIT256_forced16/';
+    outputdir = '/Users/ryanhass/Documents/MATLAB/Lele_Research/Code development/GaborKS_V2_misc/data/';
 
 % Enrichment parameters
     nk = 10;
     ntheta = 10;
-    kmin = 11;
-    kmax = 110;
+    kmin = 9;
+    kmax = 32;
     scalefact = sqrt(0.45); % A tuneable parameter to get the correct energy spectrum. 
                    % This is required due to the attenuation of mode energy 
                    % in the domain due to the window function

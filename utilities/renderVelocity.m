@@ -1,4 +1,4 @@
-function [u,v,w] = renderVelocity(uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,gmx,gmy,gmz,nxsupp,nysupp,nzsupp,xF,yF,zF)
+function [u,v,w] = renderVelocity(uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,gmxloc,gmyloc,gmzloc,nxsupp,nysupp,nzsupp,xF,yF,zF)
     % Inputs:
     %   uhatR, uhatI, ... --> complex velocity amplitudes associated with
     %                         each Gabor mode. Array size: nmodesX1
@@ -11,6 +11,10 @@ function [u,v,w] = renderVelocity(uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,g
     % Outputs:
     %   u, v, w --> Physical space velocities. Array size: nxF X nyF X nzF
         
+    global uhatR uhatI vhatR vhatI whatR whatI
+    global kx ky kz
+    global gmxloc gmyloc gmzloc
+    
     dxF = xF(2)-xF(1);
     dyF = yF(2)-yF(1);
     dzF = zF(2)-zF(1);

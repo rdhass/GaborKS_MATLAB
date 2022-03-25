@@ -1,4 +1,4 @@
-function [uout,vout,wout] = renderVelocityPeriodic(uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,gmx,gmy,gmz,nxsupp,nysupp,nzsupp,xFp,yFp,zFp)
+function [uout,vout,wout] = renderVelocityPeriodic(uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,gmxloc,gmyloc,gmzloc,nxsupp,nysupp,nzsupp,xFp,yFp,zFp)
     % Inputs:
     %   uhatR, uhatI, ... --> complex velocity amplitudes associated with
     %                         each Gabor mode. Array size: nmodesX1
@@ -11,6 +11,10 @@ function [uout,vout,wout] = renderVelocityPeriodic(uhatR,uhatI,vhatR,vhatI,whatR
     %                     in each direction. Array size: 1X(nF+nsupp)
     % Outputs:
     %   uout, vout, wout --> Physical space velocities. Array size: nxF X nyF X nzF
+    
+    global uhatR uhatI vhatR vhatI whatR whatI
+    global kx ky kz
+    global gmxloc gmyloc gmzloc
         
     dxF = xFp(2)-xFp(1);
     dyF = yFp(2)-yFp(1);
