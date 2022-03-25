@@ -16,7 +16,7 @@ clc, clear all, close all
     
 % Read in large scale flow field and compute integral scales
     load([inputdir,'LargeScaleVelocity.mat'])
-    [L,KE] = computeLargeScaleParamsHIT(U,V,W,Lx,Ly,Lz,cL);
+    [L,KE] = computeLargeScaleParamsPBL(U,V,W,Lx,Ly,Lz,cL);
     load([inputdir,'LargeScaleGradient.mat'])
     
 % Generate isotropic modes

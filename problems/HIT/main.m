@@ -4,7 +4,7 @@ clc, clear all, close all
     searchPaths
 
 % Read input file to set problem-specific parameters. 
-    inputFileHIT
+    inputFile
 
 % Setup the spatial domain
     [xLES,yLES,zLES,...                                                     % LES grid
@@ -16,7 +16,7 @@ clc, clear all, close all
     
 % Read in large scale flow field and compute integral scales
     load([inputdir,'LargeScaleVelocity.mat'])
-    [L,KE] = computeLargeScaleParamsHIT(U,V,W,Lx,Ly,Lz);
+    [L,KE] = computeLargeScaleParams(U,V,W,Lx,Ly,Lz);
     load([inputdir,'LargeScaleGradient.mat'])
     
 % Generate isotropic modes
