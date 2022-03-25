@@ -36,6 +36,7 @@ clc, clear all, close all
     Anu = 1e-4; % SGS model constant
     epsilon = 1; % Large scale
     numolec = 0;
+    cL = 1; % Parameter to adjust the integral length scale of the large scale field
                    
 % Misc parameters
     showGrid = true; % Graphically portray computational mesh? Good for debugging 

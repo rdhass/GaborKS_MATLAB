@@ -20,7 +20,9 @@ function [xLES,yLES,zLES,xQH,yQH,zQH,nxQH,nyQH,nzQH,dxQH,dyQH,dzQH,xF,yF,zF,xFp,
 
         xQH = 0:dxQH:Lx;
         yQH = 0:dyQH:Ly;
-        zQH = 0:dzQH:Lz; % Note that the QH mesh is defined from boundary to boundary
+        zQH = 0:dzQH:Lz; % The QH boundary must begin where Gabor mode enrichment is valid (i.e. where the
+                         % turbulence is 3-component). This prevents enrichment in the viscous sublayer. In the
+                         % present case of inviscid flow I'm defining this to extend all the way to the wall
         
     % High resolution mesh
         dxF = Lx/nxF;

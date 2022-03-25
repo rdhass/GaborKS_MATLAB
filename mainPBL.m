@@ -11,12 +11,12 @@ clc, clear all, close all
      xQH,yQH,zQH,nxQH,nyQH,nzQH,dxQH,dyQH,dzQH,...                          % QH grid
      xF,yF,zF,xFp,yFp,...                                               % High res grid and its periodic extension
      nxsupp,nysupp,nzsupp,kmin,kmax] ...                                              % Mode support
-     = setupDomain(nxLES,nyLES,nzLES,Lx,Ly,Lz,nxLESperQH,...
+     = setupDomainXYperiodic(nxLES,nyLES,nzLES,Lx,Ly,Lz,nxLESperQH,...
             nyLESperQH,nzLESperQH,nxF,nyF,nzF);
     
 % Read in large scale flow field and compute integral scales
     load([inputdir,'LargeScaleVelocity.mat'])
-    [L,KE] = computeLargeScaleParamsHIT(U,V,W,Lx,Ly,Lz);
+    [L,KE] = computeLargeScaleParamsHIT(U,V,W,Lx,Ly,Lz,cL);
     load([inputdir,'LargeScaleGradient.mat'])
     
 % Generate isotropic modes
@@ -32,7 +32,7 @@ clc, clear all, close all
     disp('Finished initializing isotropic Gabor modes. Writing data to disk')
     save([outputdir,'GaborModes_ntheta',num2str(ntheta),'_nk',num2str(nk),'.mat'],'uhatR','uhatI','vhatR','vhatI','whatR','whatI','kx','ky','kz',...
         'gmxloc','gmyloc','gmzloc','nxQH','nyQH','nzQH','nxLES','nyLES','nzLES','nxF','nyF','nzF',...
-        'nxsupp','nysupp','nzsupp','xF','yF','zF','xFp','yFp','zFp')
+        'nxsupp','nysupp','nzsupp','xF','yF','zF','xFp','yFp')
     
 % Visualize computational mesh with Gabor mode locations shown in one QH
 % region
