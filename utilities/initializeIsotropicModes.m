@@ -2,22 +2,25 @@ function [uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,...
           gmxloc,gmyloc,gmzloc] ...
           = initializeIsotropicModes(nxQH,nyQH,nzQH,xQH,yQH,zQH,dxQH,dyQH,dzQH,...
           nk,ntheta,kmin,kmax,scalefact,KE,L)
-    
+      
+    global uhatR uhatI vhatR vhatI whatR whatI
+    global kx ky kz
+    global gmxloc gmyloc gmzloc
 
 % Step 2: Initialize Gabor modes in each QH region
     % Allocate memory
         gmxloc = zeros(nxQH,nyQH,nzQH,nk*ntheta);
-        gmyloc = gmxloc;
-        gmzloc = gmxloc;
+        gmyloc = zeros(nxQH,nyQH,nzQH,nk*ntheta);
+        gmzloc = zeros(nxQH,nyQH,nzQH,nk*ntheta);
         kx     = zeros(nxQH,nyQH,nzQH,nk,ntheta);
-        ky     = kx;
-        kz     = kx;
+        ky     = zeros(nxQH,nyQH,nzQH,nk,ntheta);
+        kz     = zeros(nxQH,nyQH,nzQH,nk,ntheta);
         uhatR = zeros(nxQH,nyQH,nzQH,nk,ntheta);
-        uhatI = uhatR;
-        vhatR = uhatR;
-        vhatI = uhatR;
-        whatR = uhatR;
-        whatI = uhatR;
+        uhatI = zeros(nxQH,nyQH,nzQH,nk,ntheta);
+        vhatR = zeros(nxQH,nyQH,nzQH,nk,ntheta);
+        vhatI = zeros(nxQH,nyQH,nzQH,nk,ntheta);
+        whatR = zeros(nxQH,nyQH,nzQH,nk,ntheta);
+        whatI = zeros(nxQH,nyQH,nzQH,nk,ntheta);
     
     % Assign wavevector magnitudes based on logarithmically
     % spaced shells (non-dimensionalized with L)

@@ -1,4 +1,4 @@
-function [uout,vout,wout] = renderVelocityPeriodic(uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,gmxloc,gmyloc,gmzloc,nxsupp,nysupp,nzsupp,xFp,yFp,zFp)
+function [uout,vout,wout] = renderVelocityXYZperiodic(uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,gmxloc,gmyloc,gmzloc,nxsupp,nysupp,nzsupp,xFp,yFp,zFp)
     % Inputs:
     %   uhatR, uhatI, ... --> complex velocity amplitudes associated with
     %                         each Gabor mode. Array size: nmodesX1
@@ -43,27 +43,27 @@ function [uout,vout,wout] = renderVelocityPeriodic(uhatR,uhatI,vhatR,vhatI,whatR
     % Given a mode location and its support width we can convert this
     % information to indices on the fine grid 
     for n = 1:nmodes
-        ist = ceil(gmx(n)/dxF);%  - nxsupp/2;
-        ien = floor(gmx(n)/dxF) + nxsupp;%/2;
+        ist = ceil(gmxloc(n)/dxF);%  - nxsupp/2;
+        ien = floor(gmxloc(n)/dxF) + nxsupp;%/2;
         
-        jst = ceil(gmy(n)/dyF);%  - nysupp/2;
-        jen = floor(gmy(n)/dyF) + nysupp;%/2;
+        jst = ceil(gmyloc(n)/dyF);%  - nysupp/2;
+        jen = floor(gmyloc(n)/dyF) + nysupp;%/2;
         
-        kst = ceil(gmz(n)/dzF);%  - nzsupp/2;
-        ken = floor(gmz(n)/dzF) + nzsupp;%/2;
+        kst = ceil(gmzloc(n)/dzF);%  - nzsupp/2;
+        ken = floor(gmzloc(n)/dzF) + nzsupp;%/2;
         
         x = xFp(ist:ien,jst:jen,kst:ken);
         y = yFp(ist:ien,jst:jen,kst:ken);
         z = zFp(ist:ien,jst:jen,kst:ken);
         
-        kdotx = kx(n).*(x-gmx(n)) + ky(n).*(y-gmy(n)) + kz(n).*(z-gmz(n));
+        kdotx = kx(n).*(x-gmxloc(n)) + ky(n).*(y-gmyloc(n)) + kz(n).*(z-gmzloc(n));
         cs = cos(kdotx);
         ss = sin(kdotx);
         
         % Window function
-        fx = cos(pi*(x - gmx(n))/wxSupport);
-        fy = cos(pi*(y - gmy(n))/wySupport);
-        fz = cos(pi*(z - gmz(n))/wzSupport);
+        fx = cos(pi*(x - gmxloc(n))/wxSupport);
+        fy = cos(pi*(y - gmyloc(n))/wySupport);
+        fz = cos(pi*(z - gmzloc(n))/wzSupport);
         f = fx.*fy.*fz;        
         
         % Resulting velocity field

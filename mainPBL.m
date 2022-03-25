@@ -4,14 +4,14 @@ clc, clear all, close all
     searchPaths
 
 % Read input file to set problem-specific parameters. 
-    inputFileHIT
+    inputFilePBL
 
 % Setup the spatial domain
     [xLES,yLES,zLES,...                                                     % LES grid
      xQH,yQH,zQH,nxQH,nyQH,nzQH,dxQH,dyQH,dzQH,...                          % QH grid
-     xF,yF,zF,xFp,yFp,zFp,...                                               % High res grid and its periodic extension
+     xF,yF,zF,xFp,yFp,...                                               % High res grid and its periodic extension
      nxsupp,nysupp,nzsupp,kmin,kmax] ...                                              % Mode support
-     = setupDomainXYZperiodic(nxLES,nyLES,nzLES,Lx,Ly,Lz,nxLESperQH,...
+     = setupDomain(nxLES,nyLES,nzLES,Lx,Ly,Lz,nxLESperQH,...
             nyLESperQH,nzLESperQH,nxF,nyF,nzF);
     
 % Read in large scale flow field and compute integral scales
@@ -37,13 +37,13 @@ clc, clear all, close all
 % Visualize computational mesh with Gabor mode locations shown in one QH
 % region
     if showGrid
-        plotGrid(xLES,yLES,nxQH,nyQH,nzQH,xQH,yQH,xF,yF,xFp,yFp,gmxloc,gmyloc,nxsupp,nysupp)
+        plotGrid(xLES,yLES,zLES,xQH,yQH,zQH,xF,yF,zF,xFp,yFp,gmxloc,gmyloc,gmzloc,nxsupp,nysupp)
     end
 %%
 % Render velocity field
     if doRenderIsotropic
         disp('Rendering isotropic velocity field')
-        [u,v,w] = renderVelocityXYZperiodic(uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,gmxloc,gmyloc,gmzloc,nxsupp,nysupp,nzsupp,xFp,yFp,zFp);
+        [u,v,w] = renderVelocityPeriodic(uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,gmxloc,gmyloc,gmzloc,nxsupp,nysupp,nzsupp,xFp,yFp,zFp);
         disp('Velocity rendered. Saving data to disk')
         save([outputdir,'IsotropicVelocity_ntheta',num2str(ntheta),'_nk',num2str(nk),'.mat'],...
             'u','v','w','nxF','nyF','nzF')
@@ -59,7 +59,7 @@ clc, clear all, close all
 % Render velocity field
     if doRenderStrained
         disp('Begin rendering velocity')
-        [u,v,w] = renderVelocityXYZperiodic(uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,gmxloc,gmyloc,gmzloc,nxsupp,nysupp,nzsupp,xFp,yFp,zFp);
+        [u,v,w] = renderVelocityPeriodic(uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,gmxloc,gmyloc,gmzloc,nxsupp,nysupp,nzsupp,xFp,yFp,zFp);
         disp('Writing velocity to disk')
         save([outputdir,'StrainedVelocity_ntheta',num2str(ntheta),'_nk',num2str(nk),'_Anu',num2str(Anu),'.mat'],'u','v','w','nxF','nyF','nzF')
     end
