@@ -1,5 +1,6 @@
-function [xLES,yLES,zLES,xQH,yQH,zQH,nxQH,nyQH,nzQH,dxQH,dyQH,dzQH,xF,yF,zF,xFp,yFp,nxsupp,nysupp,nzsupp,...
-    kmin,kmax] = setupDomainXYperiodic(nxLES,nyLES,nzLES,Lx,Ly,Lz,nxLES_per_QH,nyLES_per_QH,nzLES_per_QH,nxF,nyF,nzF)
+function [xLES,yLES,zLES,xQHedge,yQHedge,zQHedge,xQHcent,yQHcent,zQHcent,nxQH,nyQH,nzQH,dxQH,dyQH,dzQH,...
+    xF,yF,zF,xFp,yFp,nxsupp,nysupp,nzsupp,kmin,kmax] = setupDomainXYperiodic(...
+    nxLES,nyLES,nzLES,Lx,Ly,Lz,nxLES_per_QH,nyLES_per_QH,nzLES_per_QH,nxF,nyF,nzF)
     % This routine sets up the spatial mesh. Note that the "LES" and "QH"
     % grids include the boundaries which is different than the LES solver
     % which excludes one side of periodic boundaries and excludes the top
@@ -23,9 +24,13 @@ function [xLES,yLES,zLES,xQH,yQH,zQH,nxQH,nyQH,nzQH,dxQH,dyQH,dzQH,xF,yF,zF,xFp,
         dyQH = Ly/nyQH;
         dzQH = Lz/nzQH;
 
-        xQH = 0:dxQH:Lx;
-        yQH = 0:dyQH:Ly;
-        zQH = 0:dzQH:Lz;
+        xQHedge = 0:dxQH:Lx;
+        yQHedge = 0:dyQH:Ly;
+        zQHedge = 0:dzQH:Lz;
+        
+        xQHcent = 0.5*(xQHedge(1:end-1) + xQHedge(2:end));
+        yQHcent = 0.5*(yQHedge(1:end-1) + yQHedge(2:end));
+        zQHcent = 0.5*(zQHedge(1:end-1) + zQHedge(2:end));
         
     % High resolution mesh
         dxF = Lx/nxF;

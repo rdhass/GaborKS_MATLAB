@@ -1,4 +1,4 @@
-function plotGrid(xLES,yLES,zLES,xQH,yQH,zQH,xF,yF,zF,xFp,yFp,gmxloc,gmyloc,gmzloc,nxsupp,nysupp)
+function plotGrid(xLES,yLES,zLES,nxQH,nyQH,nzQH,xQH,yQH,zQH,xF,yF,zF,xFp,yFp,gmxloc,gmyloc,gmzloc,nxsupp,nysupp)
     global gmxloc gmyloc gmzloc
     
     nxLES = length(xLES);
@@ -7,9 +7,6 @@ function plotGrid(xLES,yLES,zLES,xQH,yQH,zQH,xF,yF,zF,xFp,yFp,gmxloc,gmyloc,gmzl
     xLES2D = xLES'*ones(1,nyLES);
     yLES2D = ones(nxLES,1)*yLES;
 
-    nxQH = length(xQH)-1;
-    nyQH = length(yQH)-1;
-    nzQH = length(zQH)-1;
     xQH2D = xQH'*ones(1,nyQH+1);
     yQH2D = ones(nxQH+1,1)*yQH;
     

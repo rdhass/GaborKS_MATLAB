@@ -33,11 +33,11 @@ clc, clear all, close all
                    % This is required due to the attenuation of mode energy 
                    % in the domain due to the window function
     ctau = 7;
-    Anu = 1e-4; % SGS model constant
+    Anu = 2e-4; % SGS model constant
     epsilon = 1; % Large scale
     numolec = 0;
                    
 % Misc parameters
-    showGrid = false; % Graphically portray computational mesh? Good for debugging 
+    showGrid = true; % Graphically portray computational mesh? Good for debugging 
     doRenderIsotropic = true; % Render the pre-initialized isotropic modes?
     doRenderStrained = true; % Render the initialized anisotropic modes?

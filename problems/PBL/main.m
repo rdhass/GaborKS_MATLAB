@@ -8,17 +8,17 @@ addpath('../')
     inputFile
 
 % Setup the spatial domain
-    [xLES,yLES,zLES,...                                                  % LES grid
-     xQH,yQH,zQH,nxQH,nyQH,nzQH,dxQH,dyQH,dzQH,...                       % QH grid
-     xF,yF,zF,xFp,yFp,...                                                % High res grid and its periodic extension
-     nxsupp,nysupp,nzsupp,kmin,kmax] ...                                 % Mode support
+    [xLES,yLES,zLES,...                                                                 % LES grid
+     xQHedge,yQHedge,zQHedge,xQHcent,yQHcent,zQHcent,nxQH,nyQH,nzQH,dxQH,dyQH,dzQH,...  % QH grid
+     xF,yF,zF,xFp,yFp,...                                                               % High res grid and its periodic extension
+     nxsupp,nysupp,nzsupp,kmin,kmax] ...                                                % Mode support
      = setupDomainXYperiodic(nxLES,nyLES,nzLES,Lx,Ly,Lz,nxLESperQH,...
             nyLESperQH,nzLESperQH,nxF,nyF,nzF);
 
 % Read in large scale flow field and compute integral scales
     load([inputdir,'LargeScaleVelocity.mat'])
     gradU = getLargeScaleGradient(U,V,W,Lx,Ly,Lz,xLES,yLES,zLES);
-    [L,KE] = computeLargeScaleParams(U,V,W,Lx,Ly,xLES,yLES,zLES,cL);
+    [L,KE] = computeLargeScaleParams(U,V,W,Lx,Ly,xLES,yLES,zLES,zQHcent,nxQH,nyQH,nzQH,cL);
     [U,V,W] = extendVelocityToBoundaries(U,V,W,xLES,yLES,zLES,Lz);
     assert(size(gradU,3) == nxLES+1)
     assert(size(gradU,4) == nyLES+1)
@@ -32,7 +32,7 @@ addpath('../')
         global gmxloc gmyloc gmzloc;
         
     [uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,gmxloc,gmyloc,gmzloc] ...
-     = initializeIsotropicModes(nxQH,nyQH,nzQH,xQH,yQH,zQH,dxQH,dyQH,dzQH,...
+     = initializeIsotropicModes(nxQH,nyQH,nzQH,xQHedge,yQHedge,zQHedge,dxQH,dyQH,dzQH,...
        nk,ntheta,kmin,kmax,scalefact,KE,L);
     disp('Finished initializing isotropic Gabor modes. Writing data to disk')
     save([outputdir,'GaborModes_ntheta',num2str(ntheta),'_nk',num2str(nk),'.mat'],'uhatR','uhatI','vhatR','vhatI','whatR','whatI','kx','ky','kz',...
@@ -42,7 +42,7 @@ addpath('../')
 % Visualize computational mesh with Gabor mode locations shown in one QH
 % region
     if showGrid
-        plotGrid(xLES,yLES,zLES,xQH,yQH,zQH,xF,yF,zF,xFp,yFp,gmxloc,gmyloc,gmzloc,nxsupp,nysupp)
+        plotGrid(xLES,yLES,zLES,nxQH,nyQH,nzQH,xQHedge,yQHedge,zQHedge,xF,yF,zF,xFp,yFp,gmxloc,gmyloc,gmzloc,nxsupp,nysupp)
     end
 %%
 % Render velocity field

@@ -1,4 +1,4 @@
-function strainModes(xLES,yLES,zLES,xF,yF,zF,gradU,U,V,W,gmxloc,gmyloc,gmzloc,...
+function strainModes(xLES,yLES,zLES,xQHcent,yQHcent,zQHcent,xF,yF,zF,gradU,U,V,W,gmxloc,gmyloc,gmzloc,...
     kx,ky,kz,uhatR,uhatI,vhatR,vhatI,whatR,whatI,Anu,KE,L,nu,ctau)
     
     % Tell MATLAB to modify global variables
@@ -23,6 +23,11 @@ function strainModes(xLES,yLES,zLES,xF,yF,zF,gradU,U,V,W,gmxloc,gmyloc,gmzloc,..
                 dudxGM(i,j,:) = interp3(xLES,yLES,zLES,squeeze(gradU(i,j,:,:,:)),gmxloc,gmyloc,gmzloc,'spline');
             end
         end
+    
+    % Specify L and KE for the mode location. This is required for the
+    % spectral eddy viscosity model
+    Lgm = interp3(xQHcent,yQHcent,zQHcent,L,gmxloc,gmyloc,gmzloc,'spline');
+    KEgm = interp3(xQHcent,yQHcent,zQHcent,KE,gmxloc,gmyloc,gmzloc,'spline');
 
     % Determine minimum stable time step
         umax = max(sqrt(uhatR.^2 + uhatI.^2 + vhatR.^2 + vhatI.^2 + whatR.^2 + whatI.^2));
@@ -38,7 +43,7 @@ function strainModes(xLES,yLES,zLES,xF,yF,zF,gradU,U,V,W,gmxloc,gmyloc,gmzloc,..
             dudx = dudxGM(:,:,n);
 
             for tid = 1:round(tau(n)/dt)
-                [uR, uI, k] = rk4Step(uR,uI,k,dt,Anu,KE,L,nu,dudx);
+                [uR, uI, k] = rk4Step(uR,uI,k,dt,Anu,KEgm(n),Lgm(n),nu,dudx);
     %             assert(max(abs(k)) < 1e2);
                 assert(max(abs(uR)) < 1e2);
                 assert(max(abs(uI)) < 1e2);

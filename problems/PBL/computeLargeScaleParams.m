@@ -1,10 +1,13 @@
-function [L,KE] = computeLargeScaleParamsPBL(U,V,W,Lx,Ly,x,y,z,cL)
+function [L,KE] = computeLargeScaleParamsPBL(U,V,W,Lx,Ly,xLES,yLES,zLES,zQHcent,nxQH,nyQH,nzQH,cL)
     % This computes the integral length scale and kinetic energy for the
-    % turbulent half channel case
+    % turbulent half channel case and interpolates them to the center of
+    % each QH region
     % Inputs:
     %   U, V, W --> Large scale velocity at each LES node
     %   Lx, Ly --> domain size in x and y
-    %   x, y, z --> 1D vectors of LES node locations
+    %   xLES, yLES, zLES --> 1D vectors of LES node locations
+    %   zQHcent --> 1D vector of QH center locations
+    %   nxQH,nyQH,nzQH --> Number of QH regions
     %   cL --> tunable parameter for integral scale
     
     KE = 0.5*squeeze(mean(mean(U.^2 + V.^2 + W.^2,1),2));
@@ -22,11 +25,11 @@ function [L,KE] = computeLargeScaleParamsPBL(U,V,W,Lx,Ly,x,y,z,cL)
     xx = linspace(0,Lx/2,500)';
     yy = linspace(0,Ly/2,500);
    
-    if size(x,1) ~= size(U,1)
-        x = transpose(x);
+    if size(xLES,1) ~= size(U,1)
+        xLES = transpose(xLES);
     end
     
-    Rup = interp3(x(1:nx),y(1:ny),z(2:nz+1),R22,xx,yy,z(2:nz+1),'spline');
+    Rup = interp3(xLES(1:nx),yLES(1:ny),zLES(2:nz+1),R22,xx,yy,zLES(2:nz+1),'spline');
     
     
     Lxv = zeros(1,nz);
@@ -42,5 +45,16 @@ function [L,KE] = computeLargeScaleParamsPBL(U,V,W,Lx,Ly,x,y,z,cL)
     end
     
     L = cL*sqrt(Lyv.*Lxv);
+    
+    % Interpolate L and KE to QH centers
+    L = interp1(zLES(2:nz+1),L,zQHcent,'spline');
+    KE = interp1(zLES(2:nz+1),KE,zQHcent,'spline');
+    
+    % Replicate vectors to appropriate sized arrays
+    L = reshape(L,[1,1,nzQH]);
+    KE = reshape(KE,[1,1,nzQH]);
+    
+    L = repmat(L,[nxQH,nyQH,1]);
+    KE = repmat(KE,[nxQH,nyQH,1]);
     
     

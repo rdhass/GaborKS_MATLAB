@@ -2,6 +2,22 @@ function [uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,...
           gmxloc,gmyloc,gmzloc] ...
           = initializeIsotropicModes(nxQH,nyQH,nzQH,xQH,yQH,zQH,dxQH,dyQH,dzQH,...
           nk,ntheta,kmin,kmax,scalefact,KE,L)
+  % Function that initializes isotropic modes in each quasi-homogeneous
+  % region
+  % Inputs:
+  %     nxQH, nyQH, nzQH --> Number QH regions in each direction
+  %     xQH,yQH,zQH --> QH mesh which includes the boundaries, therefore
+  %                     length(xQH) == nxQH+1
+  %     dxQH,dyQH,dzQH --> QH mesh grid spacing
+  %     nk --> number of wavevector shells per QH region
+  %     ntheta --> number of modes per wavevector shell to initialize
+  %     kmin,kmax --> The smallest and largest wavenumber modes to
+  %                   initialize
+  %     scalefact --> Tunable parameter to ensure the induced velocity field has
+  %                   the proper energy spectrum 
+  %     KE --> Large scale kinetic energy. nxQH X nyQH X nzQH array
+  %     L --> integral length scale characteristic of large scale field. 
+  %           nxQH X nyQH X nzQH array
       
     global uhatR uhatI vhatR vhatI whatR whatI
     global kx ky kz
@@ -21,16 +37,13 @@ function [uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,...
         vhatI = zeros(nxQH,nyQH,nzQH,nk,ntheta);
         whatR = zeros(nxQH,nyQH,nzQH,nk,ntheta);
         whatI = zeros(nxQH,nyQH,nzQH,nk,ntheta);
+        umag = zeros(nxQH,nyQH,nzQH,nk);
     
     % Assign wavevector magnitudes based on logarithmically
     % spaced shells (non-dimensionalized with L)
         kedge = logspace(log10(kmin),log10(kmax),nk+1);
         kmag = (kedge(1:nk)+kedge(2:nk+1))./2;
         dk = kedge(2:nk+1)-kedge(1:nk);
-
-    % Non-dimensional model energy spectrum
-        E = getModelSpectrum(kmag,KE,L);
-        umag = sqrt(2*E.*dk./ntheta); % Amplitude of each mode such that the sum of the modes gives the correct kinetic energy
     
     for k = 1:nzQH
         zmin = zQH(k);
@@ -55,10 +68,18 @@ function [uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,...
                     kx(i,j,k,kid,:) = kmag(kid)*r.*cos(theta);
                     ky(i,j,k,kid,:) = kmag(kid)*r.*sin(theta);
                 end
+                
+                % Non-dimensional model energy spectrum
+                E = getModelSpectrum(kmag,KE(i,j,k),L(i,j,k));
+                
+                % Amplitude of each mode such that the sum of the modes gives the correct kinetic energy
+                umag(i,j,k,:) = sqrt(2*E.*dk./ntheta);
             end
         end
     end
     
+    % Replicate array for fast array operations
+    umag = repmat(umag,[1,1,1,1,ntheta]);
    
     % Get velocity vector orientations
         % Generate basis of tangent plane to wavevector shell
@@ -78,21 +99,19 @@ function [uhatR,uhatI,vhatR,vhatI,whatR,whatI,kx,ky,kz,...
             orientationY = cos(theta).*p1y + sin(theta).*p2y;
             orientationZ = cos(theta).*p1z + sin(theta).*p2z;
             
-        % With modulus and orientation in hand we can now assign real and
+    % With modulus and orientation in hand we can now assign real and
         % imaginary components
-            for kid = 1:nk
-                uRmag = rand(1)*sqrt(umag(kid)^2);
-                uImag = sqrt(umag(kid)^2 - uRmag.^2);
-                
-                uhatR(:,:,:,kid,:) = uRmag.*orientationX(:,:,:,kid,:);
-                uhatI(:,:,:,kid,:) = uImag.*orientationX(:,:,:,kid,:);
-                
-                vhatR(:,:,:,kid,:) = uRmag.*orientationY(:,:,:,kid,:);
-                vhatI(:,:,:,kid,:) = uImag.*orientationY(:,:,:,kid,:);
-                
-                whatR(:,:,:,kid,:) = uRmag.*orientationZ(:,:,:,kid,:);
-                whatI(:,:,:,kid,:) = uImag.*orientationZ(:,:,:,kid,:);
-            end
+            uRmag = rand(1)*sqrt(umag.^2);
+            uImag = sqrt(umag.^2 - uRmag.^2);
+
+            uhatR = uRmag.*orientationX;
+            uhatI = uImag.*orientationX;
+
+            vhatR = uRmag.*orientationY;
+            vhatI = uImag.*orientationY;
+
+            whatR = uRmag.*orientationZ;
+            whatI = uImag.*orientationZ;
             
     % Reshape arrays so we just have one big Gabor mode population
     nmodes = nxQH*nyQH*nzQH*nk*ntheta;
