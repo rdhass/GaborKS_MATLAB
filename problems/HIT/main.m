@@ -1,4 +1,5 @@
 clc, clear all, close all
+addpath('../')
 
 % Set search paths
     searchPaths
@@ -16,8 +17,9 @@ clc, clear all, close all
     
 % Read in large scale flow field and compute integral scales
     load([inputdir,'LargeScaleVelocity.mat'])
+    gradU = getLargeScaleGradient(U,V,W,Lx,Ly,Lz);
     [L,KE] = computeLargeScaleParams(U,V,W,Lx,Ly,Lz);
-    load([inputdir,'LargeScaleGradient.mat'])
+    [U,V,W] = extendVelocityToBoundaries(U,V,W);
     
 % Generate isotropic modes
     % First assign global variables

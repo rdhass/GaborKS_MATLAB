@@ -6,9 +6,9 @@ clc, clear all, close all
     Lz = 1;
 
     % LES mesh
-        nxLES = 32;
-        nyLES = 32;
-        nzLES = 16;
+        nxLES = 16;
+        nyLES = 16;
+        nzLES = 8;
 
     % QH mesh
         nxLESperQH = 2;

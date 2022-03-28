@@ -26,7 +26,7 @@ function [L,KE] = computeLargeScaleParamsPBL(U,V,W,Lx,Ly,x,y,z,cL)
         x = transpose(x);
     end
     
-    Rup = interp3(x,y,z,R22,xx,yy,z,'spline');
+    Rup = interp3(x(1:nx),y(1:ny),z(2:nz+1),R22,xx,yy,z(2:nz+1),'spline');
     
     
     Lxv = zeros(1,nz);

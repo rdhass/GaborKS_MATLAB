@@ -1,5 +1,10 @@
 function [xLES,yLES,zLES,xQH,yQH,zQH,nxQH,nyQH,nzQH,dxQH,dyQH,dzQH,xF,yF,zF,xFp,yFp,nxsupp,nysupp,nzsupp,...
-    kmin,kmax] = setupDomain(nxLES,nyLES,nzLES,Lx,Ly,Lz,nxLES_per_QH,nyLES_per_QH,nzLES_per_QH,nxF,nyF,nzF)
+    kmin,kmax] = setupDomainXYperiodic(nxLES,nyLES,nzLES,Lx,Ly,Lz,nxLES_per_QH,nyLES_per_QH,nzLES_per_QH,nxF,nyF,nzF)
+    % This routine sets up the spatial mesh. Note that the "LES" and "QH"
+    % grids include the boundaries which is different than the LES solver
+    % which excludes one side of periodic boundaries and excludes the top
+    % and bottom wall for wall-bounded flows
+    
     % LES field
         dxLES = Lx/nxLES;
         dyLES = Ly/nyLES;
@@ -7,7 +12,7 @@ function [xLES,yLES,zLES,xQH,yQH,zQH,nxQH,nyQH,nzQH,dxQH,dyQH,dzQH,xF,yF,zF,xFp,
 
         xLES = 0:dxLES:Lx; 
         yLES = 0:dyLES:Ly; 
-        zLES = dzLES/2:dzLES:Lz-dzLES/2;
+        zLES = [0 dzLES/2:dzLES:Lz-dzLES/2 Lz];
     
     % QH mesh
         nxQH = nxLES/nxLES_per_QH;
@@ -20,9 +25,7 @@ function [xLES,yLES,zLES,xQH,yQH,zQH,nxQH,nyQH,nzQH,dxQH,dyQH,dzQH,xF,yF,zF,xFp,
 
         xQH = 0:dxQH:Lx;
         yQH = 0:dyQH:Ly;
-        zQH = 0:dzQH:Lz; % The QH boundary must begin where Gabor mode enrichment is valid (i.e. where the
-                         % turbulence is 3-component). This prevents enrichment in the viscous sublayer. In the
-                         % present case of inviscid flow I'm defining this to extend all the way to the wall
+        zQH = 0:dzQH:Lz;
         
     % High resolution mesh
         dxF = Lx/nxF;

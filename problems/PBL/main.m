@@ -1,23 +1,28 @@
 clc, clear all, close all
+addpath('../')
 
 % Set search paths
     searchPaths
 
 % Read input file to set problem-specific parameters. 
-    inputFilePBL
+    inputFile
 
 % Setup the spatial domain
-    [xLES,yLES,zLES,...                                                     % LES grid
-     xQH,yQH,zQH,nxQH,nyQH,nzQH,dxQH,dyQH,dzQH,...                          % QH grid
-     xF,yF,zF,xFp,yFp,...                                               % High res grid and its periodic extension
-     nxsupp,nysupp,nzsupp,kmin,kmax] ...                                              % Mode support
+    [xLES,yLES,zLES,...                                                  % LES grid
+     xQH,yQH,zQH,nxQH,nyQH,nzQH,dxQH,dyQH,dzQH,...                       % QH grid
+     xF,yF,zF,xFp,yFp,...                                                % High res grid and its periodic extension
+     nxsupp,nysupp,nzsupp,kmin,kmax] ...                                 % Mode support
      = setupDomainXYperiodic(nxLES,nyLES,nzLES,Lx,Ly,Lz,nxLESperQH,...
             nyLESperQH,nzLESperQH,nxF,nyF,nzF);
-    
+
 % Read in large scale flow field and compute integral scales
     load([inputdir,'LargeScaleVelocity.mat'])
-    [L,KE] = computeLargeScaleParamsPBL(U,V,W,Lx,Ly,Lz,cL);
-    load([inputdir,'LargeScaleGradient.mat'])
+    gradU = getLargeScaleGradient(U,V,W,Lx,Ly,Lz,xLES,yLES,zLES);
+    [L,KE] = computeLargeScaleParams(U,V,W,Lx,Ly,xLES,yLES,zLES,cL);
+    [U,V,W] = extendVelocityToBoundaries(U,V,W,xLES,yLES,zLES,Lz);
+    assert(size(gradU,3) == nxLES+1)
+    assert(size(gradU,4) == nyLES+1)
+    assert(size(gradU,5) == nzLES+2)
     
 % Generate isotropic modes
     % First assign global variables
