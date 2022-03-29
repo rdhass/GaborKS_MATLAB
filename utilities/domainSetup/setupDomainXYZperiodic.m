@@ -32,8 +32,8 @@ function [xLES,yLES,zLES,xQHedge,yQHedge,zQHedge,xQHcent,yQHcent,zQHcent,nxQH,ny
         dyF = Ly/nyF;
         dzF = Lz/nzF;
         
-        xF = 0:dxF:Lx-dyF;
-        yF = 0:dyF:Ly-dxF;
+        xF = 0:dxF:Lx-dxF;
+        yF = 0:dyF:Ly-dyF;
         zF = 0:dzF:Lz-dzF;
         
     % Domain of influence of each mode
@@ -55,7 +55,7 @@ function [xLES,yLES,zLES,xQHedge,yQHedge,zQHedge,xQHcent,yQHcent,zQHcent,nxQH,ny
         xen = xF(end)+nxsupp/2*dxF;
         
         yst = -nysupp/2*dyF;
-        yen = xF(end)+nysupp/2*dyF;
+        yen = yF(end)+nysupp/2*dyF;
         
         zst = -nzsupp/2*dzF;
         zen = zF(end)+nzsupp/2*dzF;

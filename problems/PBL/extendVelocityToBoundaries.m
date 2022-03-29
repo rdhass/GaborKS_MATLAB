@@ -31,11 +31,11 @@ function [Uout,Vout,Wout] = extendVelocityToBoundaries(U,V,W,x,y,z,Lz)
     zvec = [0 dz/2:dz:Lz+dz/2];
     Uout(:,:,nz+2) = Uout(:,:,nz+1);
     Vout(:,:,nz+2) = Vout(:,:,nz+1);
-    if size(x,1)~=size(U,1)
+    if size(x,1) == 1
         x = transpose(x);
     end
-    Uout = interp3(x,y,zvec,Uout,x,y,Lz,'spline');
-    Vout = interp3(x,y,zvec,Vout,x,y,Lz,'spline');
+    Uout = interp3(x,y,zvec,Uout,x,y,z,'spline');
+    Vout = interp3(x,y,zvec,Vout,x,y,z,'spline');
     
     % Periodic BCs in x and y
     Uout(nx+1,:,:) = Uout(1,:,:);

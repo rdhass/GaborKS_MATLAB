@@ -1,5 +1,5 @@
 function [xLES,yLES,zLES,xQHedge,yQHedge,zQHedge,xQHcent,yQHcent,zQHcent,nxQH,nyQH,nzQH,dxQH,dyQH,dzQH,...
-    xF,yF,zF,xFp,yFp,nxsupp,nysupp,nzsupp,kmin,kmax] = setupDomainXYperiodic(...
+    xF,yF,zF,xFp,yFp,zFb,nxsupp,nysupp,nzsupp,kmin,kmax] = setupDomainXYperiodic(...
     nxLES,nyLES,nzLES,Lx,Ly,Lz,nxLES_per_QH,nyLES_per_QH,nzLES_per_QH,nxF,nyF,nzF)
     % This routine sets up the spatial mesh. Note that the "LES" and "QH"
     % grids include the boundaries which is different than the LES solver
@@ -37,9 +37,10 @@ function [xLES,yLES,zLES,xQHedge,yQHedge,zQHedge,xQHcent,yQHcent,zQHcent,nxQH,ny
         dyF = Ly/nyF;
         dzF = Lz/nzF;
         
-        xF = 0:dxF:Lx-dyF;
-        yF = 0:dyF:Ly-dxF;
-        zF = dzF/2:dzF:Lz-dzF/2;
+        xF = 0:dxF:Lx-dxF;
+        yF = 0:dyF:Ly-dyF;
+        zFb = 0:dzF:Lz;          % zFb is the fine grid including the "b"oundaries
+        zF = dzF/2:dzF:Lz-dzF/2; % this corresponds to the high resolution grid produced by the LES solver
         
     % Domain of influence of each mode
         nxF_per_QH = nxF/nxQH;
@@ -60,7 +61,7 @@ function [xLES,yLES,zLES,xQHedge,yQHedge,zQHedge,xQHcent,yQHcent,zQHcent,nxQH,ny
         xen = xF(end)+nxsupp/2*dxF;
         
         yst = -nysupp/2*dyF;
-        yen = xF(end)+nysupp/2*dyF;
+        yen = yF(end)+nysupp/2*dyF;
         
         xFp = xst:dxF:xen;
         yFp = yst:dyF:yen;

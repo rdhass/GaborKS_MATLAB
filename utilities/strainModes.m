@@ -1,4 +1,4 @@
-function strainModes(xLES,yLES,zLES,xQHcent,yQHcent,zQHcent,xF,yF,zF,gradU,U,V,W,gmxloc,gmyloc,gmzloc,...
+function strainModes(xLES,yLES,zLES,xQHcent,yQHcent,zQHcent,gradU,U,V,W,gmxloc,gmyloc,gmzloc,...
     kx,ky,kz,uhatR,uhatI,vhatR,vhatI,whatR,whatI,Anu,KE,L,nu,ctau)
     
     % Tell MATLAB to modify global variables
@@ -26,14 +26,13 @@ function strainModes(xLES,yLES,zLES,xQHcent,yQHcent,zQHcent,xF,yF,zF,gradU,U,V,W
     
     % Specify L and KE for the mode location. This is required for the
     % spectral eddy viscosity model
-    Lgm = interp3(xQHcent,yQHcent,zQHcent,L,gmxloc,gmyloc,gmzloc,'spline');
-    KEgm = interp3(xQHcent,yQHcent,zQHcent,KE,gmxloc,gmyloc,gmzloc,'spline');
+    Lgm = interp3(xQHcent',yQHcent,zQHcent,L,gmxloc,gmyloc,gmzloc,'spline');
+    KEgm = interp3(xQHcent',yQHcent,zQHcent,KE,gmxloc,gmyloc,gmzloc,'spline');
 
-    % Determine minimum stable time step
-        umax = max(sqrt(uhatR.^2 + uhatI.^2 + vhatR.^2 + vhatI.^2 + whatR.^2 + whatI.^2));
-        Umax = max(sqrt(U(:).^2 + V(:).^2 + W(:).^2));
-        dxF = xF(2)-xF(1);
-        dt = min([dxF/umax,dxF/Umax,1/max(S(:))])/4/2;
+    % Find max velocities for determining minimum stable time step below
+    umax = max(sqrt(uhatR.^2 + uhatI.^2 + vhatR.^2 + vhatI.^2 + whatR.^2 + whatI.^2));
+    Umax = max(sqrt(U(:).^2 + V(:).^2 + W(:).^2));
+%     dt = min([min(1./(kabs*umax)),min(1./(kabs*Umax)),1/max(S(:))])/4/2;
         
         pool = parpool('threads');
         parfor n = 1:nmodes
@@ -41,10 +40,11 @@ function strainModes(xLES,yLES,zLES,xQHcent,yQHcent,zQHcent,xF,yF,zF,gradU,U,V,W
             uR = [uhatR(n); vhatR(n); whatR(n)];
             uI = [uhatI(n); vhatI(n); whatI(n)];
             dudx = dudxGM(:,:,n);
-
+            kmag = sqrt(sum(k.^2));
+            dt = min(1/(kmag*umax),1/max(S(:)))/4/2;
+            
             for tid = 1:round(tau(n)/dt)
                 [uR, uI, k] = rk4Step(uR,uI,k,dt,Anu,KEgm(n),Lgm(n),nu,dudx);
-    %             assert(max(abs(k)) < 1e2);
                 assert(max(abs(uR)) < 1e2);
                 assert(max(abs(uI)) < 1e2);
             end

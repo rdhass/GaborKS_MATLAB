@@ -39,6 +39,6 @@ clc, clear all, close all
     cL = 1; % Parameter to adjust the integral length scale of the large scale field
                    
 % Misc parameters
-    showGrid = true; % Graphically portray computational mesh? Good for debugging 
+    showGrid = false; % Graphically portray computational mesh? Good for debugging 
     doRenderIsotropic = true; % Render the pre-initialized isotropic modes?
     doRenderStrained = true; % Render the initialized anisotropic modes?

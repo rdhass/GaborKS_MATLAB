@@ -1,4 +1,4 @@
-function [L,KE] = computeLargeScaleParamsPBL(U,V,W,Lx,Ly,xLES,yLES,zLES,zQHcent,nxQH,nyQH,nzQH,cL)
+function [L,KE] = computeLargeScaleParams(U,V,W,Lx,Ly,xLES,yLES,zLES,nxLES,nyLES,zQHcent,nxQH,nyQH,nzQH,cL)
     % This computes the integral length scale and kinetic energy for the
     % turbulent half channel case and interpolates them to the center of
     % each QH region
@@ -10,6 +10,9 @@ function [L,KE] = computeLargeScaleParamsPBL(U,V,W,Lx,Ly,xLES,yLES,zLES,zQHcent,
     %   nxQH,nyQH,nzQH --> Number of QH regions
     %   cL --> tunable parameter for integral scale
     
+    Uavg = mean(mean(U,1),2);
+    Uavg = repmat(Uavg,[nxLES,nyLES,1]);
+    U = U - Uavg;
     KE = 0.5*squeeze(mean(mean(U.^2 + V.^2 + W.^2,1),2));
     
     nx = size(U,1);
