@@ -6,9 +6,9 @@ clc, clear all, close all
     Lz = 1;
 
     % LES mesh
-        nxLES = 16;
-        nyLES = 16;
-        nzLES = 8;
+        nxLES = 192;
+        nyLES = 192;
+        nzLES = 64;
 
     % QH mesh
         nxLESperQH = 2;
@@ -16,15 +16,15 @@ clc, clear all, close all
         nzLESperQH = 2;
 
     % High resolution mesh
-        nxF = 4*nxLES;
-        nyF = 4*nyLES;
-        nzF = 4*nzLES;
+        nxF = 2*nxLES;
+        nyF = 2*nyLES;
+        nzF = 2*nzLES;
 
 % Large scale data 
-    inputdir = '/Users/ryanhass/Documents/MATLAB/Lele_Research/Code development/GaborKS_V2_misc/data/PBL/';
+    inputdir = '/work2/06632/ryanhass/stampede2/Enrichment/GaborKS_V2Data/PBL64/';
 
 % Where to write data
-    outputdir = '/Users/ryanhass/Documents/MATLAB/Lele_Research/Code development/GaborKS_V2_misc/data/PBL/';
+    outputdir = '/work2/06632/ryanhass/stampede2/Enrichment/GaborKS_V2Data/PBL64/';
 
 % Enrichment parameters
     nk = 10;
